@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/ioctl.h>
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -95,14 +96,20 @@ const char *digits[10][5] = {
     }
 };
 
+
 int main() {
 	time_t orario;
+    struct winsize w;
 	int hour, min, sec;
 	int flag, cifra_1h, cifra_2h;
     int cifra_1m, cifra_2m;
     int cifra_1s, cifra_2s;
     int i, j;
 	flag = 1;
+
+    ioctl(0, TIOCGWINSZ, &w);
+    righe = w.ws_row;
+    colonne = w.ws_col;
 
     printf("\033[31m"); /*colore rosso*/
     system("clear");
