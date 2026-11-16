@@ -2,7 +2,7 @@
 #include <sys/ioctl.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 
 
 const char *punti[5] = {
@@ -100,6 +100,9 @@ const char *digits[10][5] = {
 int main() {
 	time_t orario;
     struct winsize w;
+    int righe, colonne;
+    int righetot, colonnetot;
+    int x, y;
 	int hour, min, sec;
 	int flag, cifra_1h, cifra_2h;
     int cifra_1m, cifra_2m;
@@ -107,15 +110,25 @@ int main() {
     int i, j;
 	flag = 1;
 
-    ioctl(0, TIOCGWINSZ, &w);
-    righe = w.ws_row;
-    colonne = w.ws_col;
+    /*righe e colonne utilizzate dal print dell'orologio*/
+    righe = 5;
+    colonne = 78;
 
-    printf("\033[31m"); /*colore rosso*/
+    ioctl(0, TIOCGWINSZ, &w);
+    righetot = w.ws_row;
+    colonnetot = w.ws_col;
+
+    /*calcolo dove iniziare a stampare l'orologio*/
+    x = (colonnetot - colonne) / 2;
+    y = (righetot - righe) /2;
+
+    /*printf("\033[31m");*/ /*colore rosso*/
     system("clear");
 
     while (flag) {
-        printf("\033[H");
+        printf("\033[2J");
+        /*printf("\033[H"); serve a portare il cursore in alto a sinistra del terminale */
+        printf("\033[%d;%dH", y, x); /*porto il cursore nelle coordinate x, y */
     	orario = time(NULL);
 
     	struct tm *local_time;
